@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: #007bff;
+  color: white;
+  padding: 1rem 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sort-controls {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push sort-controls to the right */
+}
+
+.category-button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.category-button:hover {
+  background-color: #218838;
+}
+
+.sort-controls label {
+  margin-right: 0.25rem;
+  font-weight: bold;
+  color: #f0f0f0; /* Change to a lighter color for better contrast */
+}
+
+.sort-controls select {
+  padding: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+}
+
+.sort-controls select:hover {
+  outline: none;
+}
+
+.spinner-border {
+  display: block;
+  margin: 2rem auto;
+  width: 3rem;
+  height: 3rem;
+}
+
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.product-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  padding: 1rem;
+  width: 200px;
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .products-container {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .product-card {
+      width: 90%;
+  }
+}
+.sort-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem; /* Space around the sort controls */
+}
+
+.sort-controls label {
+  margin-right: 0.5rem; /* Space between label and select */
+  color: #333; /* Darker color for better visibility */
+}
+
+.sort-controls select {
+  padding: 0.25rem;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+}
+
+.no-products-message {
+  text-align: center;
+  margin-top: 2rem;
+  color: #555; /* Color for the message */
+}
