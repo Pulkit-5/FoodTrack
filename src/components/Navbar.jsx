@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FaSearch } from "react-icons/fa";
+import { CiBarcode } from "react-icons/ci";
+import { FaBarcode } from "react-icons/fa6";
 import './Navbar.css';
 
 const Navbar = ({ setInput, setBarcode }) => {
@@ -25,7 +28,7 @@ const Navbar = ({ setInput, setBarcode }) => {
     <>
       <nav className="nav">
         <div className="nav-container">
-          <a className="nav-title">Navbar</a>
+          <a className="nav-title">Gerich</a>
           <div className="nav-actions">
             <form onSubmit={handleSubmit} className="search-form">
               <input
@@ -36,11 +39,11 @@ const Navbar = ({ setInput, setBarcode }) => {
                 className="search-input"
               />
               <button type="submit" className="action-btn submit-btn">
-                Search
+              <FaSearch />
               </button>
             </form>
             <button className="action-btn barcode-btn" onClick={togglePopup}>
-              Have Barcode?
+            <FaBarcode />
             </button>
           </div>
         </div>

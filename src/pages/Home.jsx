@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Products from '../components/Products';
 import Navbar from '../components/Navbar';
 import CategoryFilter from '../components/CategoryFilter';
@@ -10,6 +10,9 @@ const Home = () => {
   const [barcode, setBarcode] = useState('');
   const [products, setProducts] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'product_name', direction: 'ascending' });
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); 
+  const observer = useRef(); 
 
   const sortProducts = (products, key, direction) => {
     const sortedProducts = [...products].sort((a, b) => {
@@ -34,9 +37,9 @@ const Home = () => {
     if (barcode) {
       url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
     } else if (input) {
-      url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(input)}&json=true`;
+      url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${input}&json=true&page=${page}`;
     } else if (category) {
-      url = `https://world.openfoodfacts.org/category/${encodeURIComponent(category)}.json`;
+      url = `https://world.openfoodfacts.org/category/${category}.json?page=${page}`;
     }
 
     const search = async () => {
@@ -51,21 +54,37 @@ const Home = () => {
           fetchedProducts = data.products || [];
         }
         
+        if (fetchedProducts.length === 0) {
+          setHasMore(false); 
+        }
+
         const sortedProducts = sortProducts(fetchedProducts, sortConfig.key, sortConfig.direction);
-        setProducts(sortedProducts);
-        console.log(sortedProducts);
+        setProducts((prevProducts) => [...prevProducts, ...sortedProducts]); // Append new products
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     search();
-  }, [input, category, barcode, sortConfig]);
+  }, [input, category, barcode, sortConfig, page]);
 
   const handleSortChange = (e) => {
     const [key, direction] = e.target.value.split('|');
     setSortConfig({ key, direction });
+    setProducts([]); 
+    setPage(1); 
   };
+
+  
+  const lastProductElementRef = useCallback((node) => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage((prevPage) => prevPage + 1); 
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [hasMore]);
 
   return (
     <div>
@@ -85,13 +104,15 @@ const Home = () => {
       {(input || category || barcode) && (
         <div className="products-container">
           {products.length > 0 ? (
-            <Products product={products} />
-          ) : (
-          
-              <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
+            products.map((product, index) => (
+              <div key={index} ref={index === products.length - 1 ? lastProductElementRef : null}>
+                <Products product={[product]} />
               </div>
-            
+            ))
+          ) : (
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
           )}
         </div>
       )}
