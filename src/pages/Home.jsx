@@ -59,7 +59,7 @@ const Home = () => {
         }
 
         const sortedProducts = sortProducts(fetchedProducts, sortConfig.key, sortConfig.direction);
-        setProducts((prevProducts) => [...prevProducts, ...sortedProducts]); // Append new products
+        setProducts((prevProducts) => [...prevProducts, ...sortedProducts]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -75,16 +75,17 @@ const Home = () => {
     setPage(1); 
   };
 
-  
   const lastProductElementRef = useCallback((node) => {
     if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage((prevPage) => prevPage + 1); 
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [hasMore]);
+    if (!barcode) {
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1); 
+        }
+      });
+      if (node) observer.current.observe(node);
+    }
+  }, [hasMore, barcode]);
 
   return (
     <div>
