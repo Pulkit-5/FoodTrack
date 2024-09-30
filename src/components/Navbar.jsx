@@ -28,7 +28,7 @@ const Navbar = ({ setInput, setBarcode }) => {
     <>
       <nav className="nav">
         <div className="nav-container">
-          <a className="nav-title">Gerich</a>
+          <a className="nav-title">FoodTrack</a>
           <div className="nav-actions">
             <form onSubmit={handleSubmit} className="search-form">
               <input
